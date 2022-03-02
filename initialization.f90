@@ -14,11 +14,7 @@ module initialization
         allocate(mask(nix,niy,niz))
         allocate(pressure(nix,niy,niz))
         
-        if (doGWTable .or. doNetRecharge .or. doGrossRecharge) then
-            allocate(watertab(nix,niy))
-			allocate(watertab_switch(nix,niy))
-        endif 
-        if (doGrossRecharge) then
+		if (doGrossRecharge) then
 			allocate(riv_recharge_gross(nix,niy))
 			allocate(riv_recharge_gross_unsat(nix,niy))
 			allocate(recharge_gross_sat(nix,niy))
@@ -26,13 +22,6 @@ module initialization
 			allocate(riv_exch_flux(nix,niy))
 			allocate(recharge_gross(nix,niy))
          endif
-        if (doRunoff) then       
-            allocate(mannings(nix,niy,1))
-            allocate(runoff2d(nix,niy))
-			allocate(runoffx(nix,niy))
-			allocate(runoffy(nix,niy))
-			allocate(runoff_leaving(nix,niy))
-        endif
         if (doNetRecharge) then
 			allocate(riv_recharge_net(nix,niy))
 			allocate(riv_recharge_net_unsat(nix,niy))
@@ -41,17 +30,12 @@ module initialization
 			allocate(gwcomp(nix,niy))
 			allocate(recharge_net(nix,niy))	
         endif
-		if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doVirtualLysimeter) then
-			allocate(mask_gwr(nix,niy))
-			allocate(specstor(nix,niy,niz))
-			allocate(p_old(nix,niy,niz))
-		endif
-		if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doVirtualLysimeter .or. doLatFlux) then
-			allocate(ksat(nix,niy,niz))
-            allocate(alpha(nix,niy,niz))
-            allocate(n(nix,niy,niz))
-		endif
+		if (doVirtualLysimeter) then
+			allocate(vl(nix,niy))
+		endif	
         if (doGrossRecharge .or. doNetRecharge) then
+            allocate(watertab(nix,niy))
+			allocate(watertab_switch(nix,niy))
 			allocate(cumrech_stor(nix,niy))
 			allocate(cumrech_stor_old(nix,niy))
 			allocate(watertab_height_init(nix,niy))
@@ -61,45 +45,26 @@ module initialization
 			allocate(theta_watertab(nix,niy))
 			allocate(recharge_wt(nix,niy))
 			allocate(watertab_cell_init(nix,niy))
-        endif
-        if (doRunoff .or. doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doLatFlux) then
-            allocate(slopex(nix,niy,1))
-            allocate(slopey(nix,niy,1))
-        endif
-        if (doGrossRecharge .or. doSaturation .or. doNetRecharge .or. doBoreholes .or. doSubStor) then
-            allocate(saturation(nix,niy,niz))
-        endif
-		if (doGrossRecharge .or. doNetRecharge .or. doBoreholes .or. doSubStor) then
+			allocate(saturation(nix,niy,niz))
             allocate(porosity(nix,niy,niz))
-        endif
+        endif 
 		if (doGrossRecharge .or. doFluxCrossing) then
 			allocate(recharge_crossing(nix,niy))
 			allocate(surf_wat_exch(nix,niy))
 			allocate(topcomp(nix,niy))
+		endif	
+        if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing) then
+            allocate(slopex(nix,niy,1))
+            allocate(slopey(nix,niy,1))
+        endif
+		if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doVirtualLysimeter) then
+			allocate(mask_gwr(nix,niy))
+			allocate(specstor(nix,niy,niz))
+			allocate(p_old(nix,niy,niz))
+			allocate(ksat(nix,niy,niz))
+            allocate(alpha(nix,niy,niz))
+            allocate(n(nix,niy,niz))
 		endif
-		if (doWaterlevel) then
-			allocate(waterlevel(nix,niy))
-		endif
-        if (doBoreholes) then
-            allocate(soilmoisture_bh(size(positions_bh,1),niz))
-        endif
-        if (doProfiles) then 
-            allocate(profiles_bh(size(positions_bh,1),niz))
-        endif
-		if (doVirtualLysimeter) then
-			allocate(vl(nix,niy))
-		endif
-		if (doLatFlux) then
-            allocate(latflux_bh(size(positions_bh,1),niz))
-			allocate(latflux_bh_resmean(size(positions_bh,1),niz))
-			allocate(latfluxvz(nix,niy))
-			allocate(latfluxmean(nix,niy))
-        endif
-		if (doBoreholesDA) then
-            allocate(soilmoisture_bh_DA(size(positions_bh,1),niz))
-			allocate(soilmoisture_DA(nix,niy,niz))
-        endif
-		
 		
     end subroutine
     
@@ -122,12 +87,6 @@ module initialization
             namepress_curr = namepress_curr(1:pos-1)//trim(adjustl(str_new))// &
                 namepress_curr(pos+len(trim(adjustl(str_old))):len(namepress_curr))
 			pos = index(namepress_curr,trim(adjustl(str_old)))
-        end do
-		pos = index(nameupdate_curr,trim(adjustl(str_old)))
-        do while (pos > 0)
-            nameupdate_curr = nameupdate_curr(1:pos-1)//trim(adjustl(str_new))// &
-                nameupdate_curr(pos+len(trim(adjustl(str_old))):len(nameupdate_curr))
-			pos = index(nameupdate_curr,trim(adjustl(str_old)))
         end do
         pos = index(nameslopex_curr,trim(adjustl(str_old)))
         do while (pos > 0)
@@ -183,12 +142,6 @@ module initialization
                 namespecstor_curr(pos+len(trim(adjustl(str_old))):len(namespecstor_curr))
 				pos = index(namespecstor_curr,trim(adjustl(str_old)))
         end do
-        pos = index(namemannings_curr,trim(adjustl(str_old)))
-        do while (pos > 0)
-            namemannings_curr = namemannings_curr(1:pos-1)//trim(adjustl(str_new))// &
-                namemannings_curr(pos+len(trim(adjustl(str_old))):len(namemannings_curr))
-				pos = index(namemannings_curr,trim(adjustl(str_old)))
-        end do
         pos = index(nameoutputpath_curr,trim(adjustl(str_old)))
         do while (pos > 0)
             nameoutputpath_curr = nameoutputpath_curr(1:pos-1)//trim(adjustl(str_new))// &
@@ -211,7 +164,6 @@ module initialization
         
         namesatur_curr = namesatur
         namepress_curr = namepress
-		nameupdate_curr = nameupdate
         nameslopex_curr = nameslopex
         nameslopey_curr = nameslopey
         nameporo_curr = nameporo
@@ -221,7 +173,6 @@ module initialization
         namemask_curr = namemask
         namemaskgwr_curr = namemaskgwr
         namespecstor_curr = namespecstor
-        namemannings_curr = namemannings
         nameoutputpath_curr = nameoutputpath
 		nameofcase_curr = nameofcase
         
@@ -240,7 +191,7 @@ module initialization
                 nameinput = argName
             end do
         else
-            nameinput = '/p/project/chbn29/hbn29r/Tools/ENS.txt'
+            nameinput = ''
         endif
 
         ! read in user input
@@ -272,7 +223,7 @@ module initialization
         implicit none
     
         ! initialize temporally varying variables
-        if (doGWTable .or. doNetRecharge .or. doGrossRecharge) then
+        if (doNetRecharge .or. doGrossRecharge) then
             watertab(:,:)=-9999999.0
 		! reset watertab_switch
 			watertab_switch(:,:) = int(1) /= 0
@@ -292,30 +243,12 @@ module initialization
             f_b_out = 0.0
             f_f_out = 0.0
 		endif
-		if (doLatFlux) then ! for lateral flux routines
-			! latflux_x = 0.0
-			! latflux_y = 0.0
-			latfluxmean(:,:) = 0.0
-			latfluxvz(:,:) = 0.0
-			latflux_bh_resmean = 0.0
-		endif			
-		
-		
-        if (doRunoff) then
-            runoff2d(:,:)=0
-			runoffx(:,:)=0
-			runoffy(:,:)=0
-			runoff_leaving(:,:)=0
-        endif
 
         ! get pressure from last time step
         if (i > istep .and. doNetRecharge .or. i > istep .and. doGrossRecharge) then
             p_old = pressure
         endif
             
-		if (doSubStor) then
-			SubStor = 0.0
-		endif
     end subroutine
     
 end module initialization

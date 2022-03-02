@@ -86,9 +86,6 @@ program analysis
 					
 				end do ! y loop
 				end do ! x loop
-				
-				! calculations needed after xy loops are finished
-				call finalizeXYLoop
 
 				! save data
 				call writeOutput	

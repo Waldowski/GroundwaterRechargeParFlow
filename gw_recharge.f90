@@ -269,27 +269,7 @@ module gw_recharge
 				stop
 			endif
 			
-			endif
-			
-			if (rest_dist_bot < -1.0E-10 .or. rest_dist_top < -1.0E-10) then
-				print *, 'rest_dist_bot',rest_dist_bot
-				print *, 'rest_dist_top',rest_dist_top
-				print *, 'watertab_cell', watertab_cell
-				print *, 'watertab_cell_init(j,k)', watertab_cell_init(j,k)
-				print *, 'watertab_cell_top', watertab_cell_top
-				print *, 'watertab_cell_bot', watertab_cell_bot
-				print *, 'watertab_height_top', watertab_height_top
-				print *, 'watertab', watertab(j,k)
-				print *, 'watertab height init', watertab_height_init(j,k)
-				print *, 'watertab height', watertab_height(j,k)
-				print *, 'i_sat_new',i_sat_new
-				print *, 'j',j
-				print *, 'k',k
-				print *, 't',i
-				print *, 'fatal error - negative length... exiting program'
-				stop
-			endif
-			
+			endif		
 					
 		endif
 		
