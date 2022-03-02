@@ -16,7 +16,6 @@ module declaration
     real*8 :: poro_const                                                      ! porosity
     real*8 :: ksat_const                                                      ! saturated hydraulic conductivity
     real*8 :: alpha_const, n_const                                            ! van Genuchten model parameters
-    real*8 :: mannings_const                                                  ! Manning's coefficient
     real*8 :: sx_const                                                        ! slope in x-direction
     real*8 :: sy_const                                                        ! slope in y-direction
 	real*8 :: maskgwr_const                                                   ! groundwater recharge mask
@@ -56,9 +55,7 @@ module declaration
 	
     ! raw output
     real*8,allocatable :: saturation(:,:,:)                                   ! saturation 
-    real*8,allocatable :: pressure(:,:,:)                                     ! pressure
-	real*8,allocatable :: soilmoisture_DA(:,:,:)                              ! updated soil moisture (DA)
-	
+    real*8,allocatable :: pressure(:,:,:)                                     ! pressure	
     
     ! groundwater recharge
     integer*4 :: i_sat_old, i_sat_new                                         ! index of last saturated cell at old and new timestep
@@ -89,34 +86,9 @@ module declaration
 	real*8,allocatable :: watertab_height_init(:,:)                           ! initial groundwater table height
 	logical,allocatable :: watertab_switch(:,:)                               ! switch to make sure water table is only calculated once at each x-y location
     
-    ! overland flow
-    real*8,allocatable :: runoff2d(:,:)                                       ! runoff at land surface
-	real*8,allocatable :: runoffx(:,:)                                        ! runoff in x-direction
-	real*8,allocatable :: runoffy(:,:)                                        ! runoff in y-direction
-	real*8,allocatable :: runoff_leaving(:,:)                                 ! runoff leaving the domain
-	
-	! boreholes
-    integer*4,allocatable :: positions_bh(:,:)                  ! x and y coordinates of artificial boreholes
-    real*8,allocatable :: soilmoisture_bh(:,:)                  ! soil moisture at artificial boreholes
-	real*8,allocatable :: soilmoisture_bh_DA(:,:)               ! soil moisture at artificial boreholes
-    real*8,allocatable :: profiles_bh(:,:)                      ! pressure profiles at artificial boreholes
-	integer*4 :: cfact                                          ! coarsening factor - determines how many fine grid cells are accumulated in 1 coarse borehole in each direction
-	
-	! water level and storage
-	real*8,allocatable :: waterlevel(:,:)                                     ! surface water level above GOK
-	real*8 :: SubStor                                    ! total subsurface storage
-	
-	! lateral fluxes routines
-	real*8,allocatable :: latfluxmean(:,:)
-	real*8,allocatable :: latfluxvz(:,:)
-	real*8,allocatable :: latflux_bh(:,:)                              ! resulting latflux at artificial boreholes - velocities averaged if coarsefact > 1
-	real*8,allocatable :: latflux_bh_resmean(:,:)                      ! resulting latflux at artificial boreholes - resulting fluxes averaged if coarsefact > 1
-	real*8 :: latflux_x_mean, latflux_y_mean, latflux_x, latflux_y     ! lateral fluxes in x and y direction
-    
     ! file names
     character*200 :: namesatur, namesatur_curr                                ! name of saturation file (current)
     character*200 :: namepress, namepress_curr                                ! name of pressure file (current)
-	character*200 :: nameupdate, nameupdate_curr                              ! name of DA update file (current)
     character*200 :: nameslopex, nameslopex_curr                      ! name of x-slope file (current)
     character*200 :: nameslopey, nameslopey_curr                      ! name of y-slope file (current)
     character*200 :: nameporo, nameporo_curr                          ! name of porosity file (current)
@@ -126,7 +98,6 @@ module declaration
     character*200 :: namemask, namemask_curr                          ! name of mask file (current)
     character*200 :: namemaskgwr, namemaskgwr_curr                    ! name of gwr mask file (current)
     character*200 :: namespecstor, namespecstor_curr                  ! name of specific storage file (current)
-    character*200 :: namemannings, namemannings_curr                  ! name of mannings file (current)
     character*200 :: nameoutputpath, nameoutputpath_curr          ! path to generated output files
     character*200 :: nameofcase, nameofcase_curr          ! specific name contained in all generated output
     character*200 :: nameinput                                        ! name of user input file
@@ -135,7 +106,6 @@ module declaration
     character*5 :: ensname                                            ! string of current ensemble name (number - 1)
     character*3 :: ensnumber                                          ! string of current ensemble number
 	
-    
     ! saving
     integer*4 :: reclen, irec                                         ! size and position of data to be saved
     
@@ -146,15 +116,6 @@ module declaration
 	logical :: doRechargeSources                                      ! split groundwater recharge into its different sources
 	logical :: doVirtualLysimeter                                     ! calculate vertical flux below roots
     logical :: doGWTable                                              ! calculate depth to groundwater table
-    logical :: doRunoff                                               ! calculate land surface runoff
-    logical :: doPressure                                             ! save pressure heads as .bin
-    logical :: doSaturation                                           ! save saturation as .bin
-	logical :: doWaterlevel                                           ! save surface water level as .bin
-	logical :: doBoreholes                                            ! extract soil moisture at artificial boreholes
-    logical :: doProfiles                                             ! extract pressure profiles at artificial boreholes
-	logical :: doSubStor                                              ! calculate total subsurface storage   
-	logical :: doLatFlux                                              ! calculate lateral fluxes
-	logical :: doBoreholesDA                                          ! extract soil moisture at artificial boreholes right after DA update
 	
 	logical :: constsx
 	logical :: constsy
@@ -165,7 +126,6 @@ module declaration
 	logical :: constmask
 	logical :: constmaskgwr
 	logical :: constspecstor
-	logical :: constmannings
     
     ! command line input arguments
     integer*4 :: narg,arg                                             ! total and current number of input arguments

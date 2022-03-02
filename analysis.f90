@@ -43,15 +43,6 @@ program analysis
             call updateFileNames('TIME',nameruntime)
 			
 				INQUIRE(FILE=namepress_curr, EXIST=file_exists)
-				
-				if (file_exists .and. doBoreholesDA .and. irec > 1) then
-					if (dt==1) then
-						INQUIRE(FILE=nameupdate_curr, EXIST=file_exists)
-						else
-						print *,'Please note that doBoreholesDA currently only works with timestepsize of 1 hour.'
-						file_exists = 1==0
-					endif
-				endif
 			
 			if (file_exists) then
 			
