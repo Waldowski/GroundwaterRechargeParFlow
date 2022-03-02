@@ -45,7 +45,7 @@ module calculations
         endif
         
         ! determine depth to groundwater table
-        if (doNetRecharge .or. doGrossRecharge) then
+        if (doGWTable .or. doNetRecharge .or. doGrossRecharge) then
             call depthToGroundwater
         endif
 		

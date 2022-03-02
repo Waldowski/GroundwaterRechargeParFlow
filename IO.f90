@@ -256,6 +256,11 @@ module IO
     subroutine writeOutput
         
         implicit none 
+		
+		if (doGWTable) then
+            call write_binary(watertab,trim(nameoutputpath_curr)//'watertab_'//&
+            nameofcase_curr,nix,niy,1,irec)
+        endif
 		        
         if (doGrossRecharge .and. irec > 1) then
             call write_binary(recharge_gross,trim(nameoutputpath_curr)//'recharge_gross_'//&

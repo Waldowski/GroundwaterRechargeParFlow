@@ -34,8 +34,6 @@ module initialization
 			allocate(vl(nix,niy))
 		endif	
         if (doGrossRecharge .or. doNetRecharge) then
-            allocate(watertab(nix,niy))
-			allocate(watertab_switch(nix,niy))
 			allocate(cumrech_stor(nix,niy))
 			allocate(cumrech_stor_old(nix,niy))
 			allocate(watertab_height_init(nix,niy))
@@ -48,6 +46,10 @@ module initialization
 			allocate(saturation(nix,niy,niz))
             allocate(porosity(nix,niy,niz))
         endif 
+		if (doGWTable .or. doGrossRecharge .or. doNetRecharge) then
+            allocate(watertab(nix,niy))
+			allocate(watertab_switch(nix,niy))
+		endif
 		if (doGrossRecharge .or. doFluxCrossing) then
 			allocate(recharge_crossing(nix,niy))
 			allocate(surf_wat_exch(nix,niy))
@@ -223,7 +225,7 @@ module initialization
         implicit none
     
         ! initialize temporally varying variables
-        if (doNetRecharge .or. doGrossRecharge) then
+        if (doGWTable .or. doNetRecharge .or. doGrossRecharge) then
             watertab(:,:)=-9999999.0
 		! reset watertab_switch
 			watertab_switch(:,:) = int(1) /= 0
