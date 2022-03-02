@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --job-name="ENS_OL_analysis"
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --ntasks-per-node=48
+#SBATCH --output=mpiMPMD-out.%j
+#SBATCH --error=mpiMPMD-err.%j
+#SBATCH --time=12:00:00
+#SBATCH --partition=batch
+#SBATCH --mail-type=NONE
+#SBATCH --account=hbn29
+
+#cd /p/project/chbn29/hbn29r/Tools
+date
+srun analysis Neckar_ENS1_mask_ks.txt
+date
+exit 0
+
