@@ -30,7 +30,6 @@ module IO
         read(100) meandy !DY 
         read(100) meandz !DZ 
         
-        ! print grid size
         print *,trim(adjustl(fname)),': nx,ny,nz ',nix,niy,niz
         ! End: reading of domain spatial information
         
@@ -201,7 +200,7 @@ module IO
         
     end subroutine
   
-    ! writes data to .bin files
+    ! writes data to binary files
     subroutine write_binary(value,fname,nx,ny,nz,irec)
       
         implicit none
@@ -227,7 +226,7 @@ module IO
         
     end subroutine
     
-    ! writes scalar data to .bin files
+    ! writes scalar data to binary files
     subroutine write_binary_scalar(value,fname,irec)
       
         implicit none

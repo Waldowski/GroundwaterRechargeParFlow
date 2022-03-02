@@ -42,7 +42,6 @@ module declaration
     real*8,allocatable :: porosity(:,:,:)                                     ! porosity
     real*8,allocatable :: ksat(:,:,:)                                         ! saturated hydraulic conductivity
     real*8,allocatable :: alpha(:,:,:), n(:,:,:)                              ! van Genuchten model parameters
-    real*8,allocatable :: mannings(:,:,:)                                     ! Manning's coefficient
     real*8,allocatable :: slopex(:,:,:)                                       ! slope in x-direction
     real*8,allocatable :: slopey(:,:,:)                                       ! slope in y-direction
 	
@@ -80,33 +79,33 @@ module declaration
     ! file names
     character*200 :: namesatur, namesatur_curr                                ! name of saturation file (current)
     character*200 :: namepress, namepress_curr                                ! name of pressure file (current)
-    character*200 :: nameslopex, nameslopex_curr                      ! name of x-slope file (current)
-    character*200 :: nameslopey, nameslopey_curr                      ! name of y-slope file (current)
-    character*200 :: nameporo, nameporo_curr                          ! name of porosity file (current)
-    character*200 :: nameksat, nameksat_curr                          ! name of conductivity file (current)
-    character*200 :: namealpha, namealpha_curr                        ! name of van Genuchten alpha file (current)
-    character*200 :: namen, namen_curr                                ! name of van Genuchten n file (current)
-    character*200 :: namemask, namemask_curr                          ! name of mask file (current)
-    character*200 :: namemaskgwr, namemaskgwr_curr                    ! name of gwr mask file (current)
-    character*200 :: namespecstor, namespecstor_curr                  ! name of specific storage file (current)
-    character*200 :: nameoutputpath, nameoutputpath_curr          ! path to generated output files
-    character*200 :: nameofcase, nameofcase_curr          ! specific name contained in all generated output
-    character*200 :: nameinput                                        ! name of user input file
-	character*200 :: nameoutput                                           ! name of output file + path
-    character*5 :: nameruntime                                        ! string of current time step
-    character*5 :: ensname                                            ! string of current ensemble name (number - 1)
-    character*3 :: ensnumber                                          ! string of current ensemble number
+    character*200 :: nameslopex, nameslopex_curr                      		  ! name of x-slope file (current)
+    character*200 :: nameslopey, nameslopey_curr                              ! name of y-slope file (current)
+    character*200 :: nameporo, nameporo_curr                                  ! name of porosity file (current)
+    character*200 :: nameksat, nameksat_curr                                  ! name of conductivity file (current)
+    character*200 :: namealpha, namealpha_curr                                ! name of van Genuchten alpha file (current)
+    character*200 :: namen, namen_curr                                        ! name of van Genuchten n file (current)
+    character*200 :: namemask, namemask_curr                                  ! name of mask file (current)
+    character*200 :: namemaskgwr, namemaskgwr_curr                            ! name of gwr mask file (current)
+    character*200 :: namespecstor, namespecstor_curr                          ! name of specific storage file (current)
+    character*200 :: nameoutputpath, nameoutputpath_curr                      ! path to generated output files
+    character*200 :: nameofcase, nameofcase_curr                              ! specific name contained in all generated output
+    character*200 :: nameinput                                                ! name of user input file
+	character*200 :: nameoutput                                               ! name of output file + path
+    character*5 :: nameruntime                                                ! string of current time step
+    character*5 :: ensname                                                    ! string of current ensemble name (number - 1)
+    character*3 :: ensnumber                                 		          ! string of current ensemble number
 	
     ! saving
-    integer*4 :: reclen, irec                                         ! size and position of data to be saved
-    
+    integer*4 :: reclen, irec                                       		  ! size and position of data to be saved
+		
     ! flags for calculation 
-    logical :: doGrossRecharge                                        ! calculate groundwater recharge (Fastest method! For ParFlow standalone, it is the same as net recharge)             
-    logical :: doNetRecharge                                          ! calculate groundwater recharge (Slower. For ParFlow-CLM. Groundwater extracted by plants is not counted as recharge here)
-	logical :: doFluxCrossing                                         ! calculate the vertical flux crossing the water table
-	logical :: doRechargeSources                                      ! split groundwater recharge into its different sources
-	logical :: doVirtualLysimeter                                     ! calculate vertical flux below roots
-    logical :: doGWTable                                              ! calculate depth to groundwater table
+    logical :: doGrossRecharge                                 		          ! calculate gross groundwater recharge (fastest method)            
+    logical :: doNetRecharge                                                  ! calculate net groundwater recharge
+	logical :: doFluxCrossing                                                 ! calculate the vertical flux crossing the water table
+	logical :: doRechargeSources                                              ! split groundwater recharge into its different sources
+	logical :: doVirtualLysimeter                                             ! calculate vertical flux below roots
+    logical :: doGWTable                                                      ! calculate depth to groundwater table
 	
 	logical :: constsx
 	logical :: constsy
@@ -119,8 +118,8 @@ module declaration
 	logical :: constspecstor
     
     ! command line input arguments
-    integer*4 :: narg,arg                                             ! total and current number of input arguments
-    character*200 :: argName                                          ! string of input argument
+    integer*4 :: narg,arg                                                      ! total and current number of input arguments
+    character*200 :: argName                                                   ! string of input argument
     
 end module declaration
 

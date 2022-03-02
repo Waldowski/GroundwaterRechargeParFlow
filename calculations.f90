@@ -102,11 +102,8 @@ module calculations
 				else
 					riv_recharge_gross(j,k) = 0.0
 				endif
-				! print*,'j',j
-				! print*,'k',k
-				! print*,'mask_gwr',mask_gwr(j,k)
-				! print*,'riv rech gross', riv_recharge_gross(j,k)
 			endif
+			
 			! mask out rivers for flux crossing
 			if (doFluxCrossing) then
 				if(mask_gwr(j,k) == 0) then ! river	
@@ -121,7 +118,7 @@ module calculations
 				if (pressure(j,k,niz) >=0) then
 					recharge_net_sat(j,k) = recharge_net(j,k) - recharge_wt(j,k) ! recharge_wt is not a part of local ponding
 				endif
-				! mask out rivers
+				! mask out rivers for net recharge
 				if (mask_gwr(j,k) == 0) then ! river
 					riv_recharge_net(j,k) = recharge_net(j,k)
 					recharge_net_sat(j,k) = 0.0

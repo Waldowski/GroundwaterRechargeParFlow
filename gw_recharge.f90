@@ -185,11 +185,6 @@ module gw_recharge
 			theta_watertab_init(j,k) = (theta_init(j,k,watertab_cell_bot) * rest_dist_bot + &
 			theta_init(j,k,watertab_cell_top)*rest_dist_top)/abs(dh)
 			
-			if(abs((rest_dist_bot+rest_dist_top) /dh)-1 > 1.0E-6) then
-				print *,'fatal error - water table distance for calculations does not match dh'
-				stop
-			endif
-			
 			! water table is more than one cell above initial
 			else if (watertab_cell > watertab_cell_init(j,k)+1) then
 			
@@ -213,11 +208,6 @@ module gw_recharge
 			vardz(niz-watertab_cell_bot:niz-watertab_cell_top+2:-1)) + &
 			theta_init(j,k,watertab_cell_top)*rest_dist_top)/abs(dh)
 			
-			if(abs((rest_dist_bot+rest_dist_top+sum(vardz(niz-watertab_cell_bot:niz-watertab_cell_top+2:-1))) /dh)-1 > 1.0E-6) then
-				print *,'fatal error - water table distance for calculations does not match dh'
-				stop
-			endif
-			
 			! water table is one cell below initial
 			else if (watertab_cell_init(j,k) == watertab_cell+1) then 
 			
@@ -235,11 +225,6 @@ module gw_recharge
 			
 			theta_watertab_init(j,k) = (theta_init(j,k,watertab_cell_bot) * rest_dist_bot + &
 			theta_init(j,k,watertab_cell_top)*rest_dist_top)/abs(dh)
-			
-			if(abs((rest_dist_bot+rest_dist_top) /dh)-1 > 1.0E-6) then
-				print *,'fatal error - water table distance for calculations does not match dh'
-				stop
-			endif
 			
 			! water table is more than one cell below initial
 			else if (watertab_cell_init(j,k) > watertab_cell+1) then 
@@ -263,11 +248,6 @@ module gw_recharge
 			sum(theta_init(j,k,watertab_cell_bot+1:watertab_cell_top-1)* &
 			vardz(niz-watertab_cell_bot:niz-watertab_cell_top+2:-1)) + &
 			theta_init(j,k,watertab_cell_top)*rest_dist_top)/abs(dh)			
-			
-			if(abs((rest_dist_bot+rest_dist_top+sum(vardz(niz-watertab_cell_bot:niz-watertab_cell_top+2:-1))) /dh)-1 > 1.0E-6) then
-				print *,'fatal error - water table distance for calculations does not match dh'
-				stop
-			endif
 			
 			endif		
 					

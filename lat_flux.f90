@@ -42,13 +42,6 @@ module lat_flux
         real*8 :: up, down      ! up and downstream gradient
 		integer*4 :: z          ! height coordinate
 		
-		! print*,'slopex',slopex(j,k,1)
-		! print*,'slopey',slopey(j,k,1)
-		! print*,'ks',ksat(j,k,z)
-		
-		! print*,'alpha',slopey(j,k,z)
-		! print*,'pressure',pressure(j,k,z)
-		
 		! at right boundary?
         if (j < nix) then        
 			gc_n = g*0.5*(cos(atan(slopex(j,k,1))) + cos(atan(slopex(j+1,k,1))))
