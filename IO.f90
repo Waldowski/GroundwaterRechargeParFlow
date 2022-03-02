@@ -136,17 +136,34 @@ module IO
         implicit none
 
 			call pfb_read(mask,namemask_curr)
-     
-        if (doRunoff) then  
+     	
+        if (doGrossRecharge .or. doNetRecharge) then
 		
-			if (constmannings) then
-				call const_value(mannings,mannings_const,nix,niy,1)
+			if (constsx) then
+				call const_value(slopex,sx_const,nix,niy,1)
 			else
-				call pfb_read(mannings,namemannings_curr) 				
+				call pfb_read(slopex,nameslopex_curr)
+			endif
+			
+			if (constsy) then
+				call const_value(slopey,sy_const,nix,niy,1)
+			else
+				call pfb_read(slopey,nameslopey_curr)
+			endif	
+			if (constporo) then
+				call const_value(porosity,poro_const,nix,niy,niz)
+			else
+				call pfb_read(porosity,nameporo_curr)
+			endif
+			if (constspecstor) then
+				call const_value(specstor,specstor_const,nix,niy,niz)
+			else
+				call pfb_read(specstor,namespecstor_curr)
 			endif
 			
         endif
-        if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doVirtualLysimeter .or. doLatFlux) then
+		if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doVirtualLysimeter) then
+		
 			if (constksat) then
 				call const_value(ksat,ksat_const,nix,niy,niz)
 			else
@@ -162,42 +179,12 @@ module IO
 			else
 				call pfb_read(n,namen_curr)				
 			endif
-		endif	
-		if (doGrossRecharge .or. doNetRecharge .or. doFluxCrossing .or. doVirtualLysimeter) then	
 			if (constmaskgwr) then
 				call const_value(mask_gwr, maskgwr_const,nix,niy,1)
 			else
 				call pfb_read(mask_gwr,namemaskgwr_curr)
 			endif
-        endif
-        if (doRunoff .or. doGrossRecharge .or. doNetRecharge .or. doLatFlux) then
-		
-			if (constsx) then
-				call const_value(slopex,sx_const,nix,niy,1)
-			else
-				call pfb_read(slopex,nameslopex_curr)
-			endif
 			
-			if (constsy) then
-				call const_value(slopey,sy_const,nix,niy,1)
-			else
-				call pfb_read(slopey,nameslopey_curr)
-			endif	
-        endif
-        if (doGrossRecharge .or. doNetRecharge .or. doBoreholes .or. doSubStor) then
-		
-			if (constporo) then
-				call const_value(porosity,poro_const,nix,niy,niz)
-			else
-				call pfb_read(porosity,nameporo_curr)
-			endif
-		endif	
-		if (doGrossRecharge .or. doNetRecharge) then	
-			if (constspecstor) then
-				call const_value(specstor,specstor_const,nix,niy,niz)
-			else
-				call pfb_read(specstor,namespecstor_curr)
-			endif
 		endif
         
     end subroutine
@@ -208,11 +195,8 @@ module IO
         implicit none
         
         call pfb_read(pressure,namepress_curr) 
-        if (doGrossRecharge .or. doSaturation .or. doNetRecharge .or. doBoreholes .or. doSubStor) then
+        if (doGrossRecharge .or. doNetRecharge) then
             call pfb_read(saturation,namesatur_curr) 
-        endif  
-		if (doBoreholesDA .and. irec > 1) then
-            call pfb_read(soilmoisture_DA,nameupdate_curr) 
         endif  
         
     end subroutine
@@ -277,31 +261,28 @@ module IO
             call write_binary(recharge_gross,trim(nameoutputpath_curr)//'recharge_gross_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
         endif
+		
         if (doNetRecharge .and. irec > 1) then
             call write_binary(recharge_net,trim(nameoutputpath_curr)//'recharge_net_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
         endif
+		
 		if (doFluxCrossing .and. irec > 1) then
 			call write_binary(recharge_crossing,trim(nameoutputpath_curr)//'flux_crossing_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
 		endif
+		
 		if (doRechargeSources .and. doNetRecharge .and. irec > 1) then
-			call write_binary(recharge_net_sat,trim(nameoutputpath_curr)//'recharge_loc_pond_net_'//&
+			call write_binary(recharge_net_sat,trim(nameoutputpath_curr)//'recharge_loc_pond_net_'//& ! recharge at local ponding spots
 			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(recharge_net_unsat,trim(nameoutputpath_curr)//'recharge_unsat_net_'//&
+			call write_binary(riv_recharge_net,trim(nameoutputpath_curr)//'recharge_river_net_'//& ! recharge at rivers
 			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(riv_recharge_net,trim(nameoutputpath_curr)//'recharge_river_net_'//&
-			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(riv_recharge_net_unsat,trim(nameoutputpath_curr)//'recharge_river_unsat_net_'//&
-			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(gwcomp,trim(nameoutputpath_curr)//'recharge_ss_component_'//&
+			call write_binary(gwcomp,trim(nameoutputpath_curr)//'recharge_ss_component_'//& ! specific storage component of recharge
 			nameofcase_curr,nix,niy,1,irec-1)
 		endif
 		
 		if (doRechargeSources .and. doGrossRecharge .and. irec > 1) then
 			call write_binary(recharge_gross_sat,trim(nameoutputpath_curr)//'recharge_loc_pond_gross_'//&
-			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(recharge_gross_unsat,trim(nameoutputpath_curr)// 'recharge_unsat_gross_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
 			call write_binary(riv_exch_flux,trim(nameoutputpath_curr)//'river_exch_flux_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
@@ -309,69 +290,12 @@ module IO
 			nameofcase_curr,nix,niy,1,irec-1)
 			call write_binary(riv_recharge_gross,trim(nameoutputpath_curr)//'recharge_river_gross_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(riv_recharge_gross_unsat,trim(nameoutputpath_curr)//'recharge_river_unsat_gross_'//&
-			nameofcase_curr,nix,niy,1,irec-1)
 		endif
 		
 		if (doVirtualLysimeter .and. irec > 1) then
             call write_binary(vl,trim(nameoutputpath_curr)//'vl_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
         endif
-		
-        if (doGWTable) then
-            call write_binary(watertab,trim(nameoutputpath_curr)//'watertab_'//&
-			nameofcase_curr,nix,niy,1,irec)
-        endif
-        if (doRunoff) then
-            call write_binary(runoff2d,trim(nameoutputpath_curr)//'runoff_total_'//&
-			nameofcase_curr,nix,niy,1,irec)
-			!call write_binary(runoffx,trim(nameoutputpath_curr)//'runoff_x_dir_'//&
-			!nameofcase_curr,nix,niy,1,irec)
-			!call write_binary(runoffy,trim(nameoutputpath_curr)//'runoff_y_dir_'//&
-			!nameofcase_curr,nix,niy,1,irec)
-			call write_binary(runoff_leaving,trim(nameoutputpath_curr)//'runoff_leaving_'//&
-			nameofcase_curr,nix,niy,1,irec)
-        endif
-        if (doPressure) then
-            call write_binary(pressure,trim(nameoutputpath_curr)//'pressure_'//&
-			nameofcase_curr,nix,niy,niz,irec)
-        endif
-        if (doSaturation) then
-            call write_binary(saturation,trim(nameoutputpath_curr)//'saturation_'//&
-			nameofcase_curr,nix,niy,niz,irec)
-        endif
-        if (doWaterlevel) then
-			call write_binary(waterlevel,trim(nameoutputpath_curr)//'waterlevel_'//&
-			nameofcase_curr,nix,niy,1,irec)
-		endif
-		if (doBoreholes) then
-			call write_binary(soilmoisture_bh,trim(nameoutputpath_curr)//'boreholes_'//&
-			nameofcase_curr,size(positions_bh,1),niz,1,irec)
-		endif
-		if (doProfiles) then
-			call write_binary(profiles_bh,trim(nameoutputpath_curr)//'profiles_'//&
-			nameofcase_curr,size(positions_bh,1),niz,1,irec)
-		endif
-		if (doSubStor) then
-			call write_binary_scalar(SubStor,trim(nameoutputpath_curr)//'substor_'//&
-			nameofcase_curr,irec)
-		endif
-		if (doLatFlux) then
-			call write_binary(latflux_bh,trim(nameoutputpath_curr)//'latflux_bh_'//&
-			nameofcase_curr,size(latflux_bh,1),niz,1,irec)
-			call write_binary(latfluxmean,trim(nameoutputpath_curr)//'latfluxmean_'//&
-			nameofcase_curr,nix,niy,1,irec)
-			call write_binary(latfluxvz,trim(nameoutputpath_curr)//'latfluxvz_'//&
-			nameofcase_curr,nix,niy,1,irec)
-			if (cfact > 1) then
-				call write_binary(latflux_bh_resmean,trim(nameoutputpath_curr)//'latflux_bh_resmean_'//&
-				nameofcase_curr,size(latflux_bh,1),niz,1,irec)
-			endif
-		endif
-		if (doBoreholesDA .and. irec > 1) then
-			call write_binary(soilmoisture_bh_DA,trim(nameoutputpath_curr)//'boreholes_DA_'//&
-			nameofcase_curr,size(positions_bh,1),niz,1,irec-1)
-		endif
 		
     end subroutine
        
@@ -420,17 +344,6 @@ module IO
                     read(300,*) var, val
                     vardz(i) = val
                 end do
-			else if (var == 'coarsefact') then
-                cfact = val
-            else if (var == 'nboreholes') then
-                allocate(positions_bh(int(val),2))
-                ! loop over all boreholes
-                do i=1,int(val)
-                    read(300,*) var, val
-                    positions_bh(i,1) = int(val)
-                    read(300,*) var, val
-                    positions_bh(i,2) = int(val)
-                end do
 			else if (var == 'rootend') then
                 rootend = int(val)
             else if (var == 'ensstart') then
@@ -449,24 +362,6 @@ module IO
                 doVirtualLysimeter = int(val) /= 0
             else if (var == 'doGWTable') then
                 doGWTable = int(val) /= 0
-            else if (var == 'doRunoff') then
-                doRunoff = int(val) /= 0
-            else if (var == 'doPressure') then
-                doPressure = int(val) /= 0
-            else if (var == 'doSaturation') then
-                doSaturation = int(val) /= 0
-			else if (var == 'doWaterlevel') then
-                doWaterlevel = int(val) /= 0
-			else if (var == 'doBoreholes') then
-                doBoreholes = int(val) /= 0
-			else if (var == 'doProfiles') then
-                doProfiles = int(val) /= 0
-			else if (var == 'doSubStor') then
-                doSubStor = int(val) /= 0
-			else if (var == 'doLatFlux') then
-                doLatFlux = int(val) /= 0
-			else if (var == 'doBoreholesDA') then
-                doBoreholesDA = int(val) /= 0
 			else if (var == 'constsx') then
 				constsx = int(val) /= 0
 			else if (var == 'constsy') then
@@ -489,10 +384,8 @@ module IO
                 namesatur = valChar
             else if (var == 'namepress') then
                 namepress = valChar
-			else if (var == 'nameupdate') then
-                nameupdate = valChar
             else if (var == 'nameslopex') then
-					nameslopex = valChar
+				nameslopex = valChar
             else if (var == 'nameslopey') then
                 nameslopey = valChar
             else if (var == 'nameporo') then
@@ -509,8 +402,6 @@ module IO
                 namemaskgwr = valChar
             else if (var == 'namespecstor') then
                 namespecstor = valChar
-            else if (var == 'namemannings') then
-                namemannings = valChar
             else if (var == 'nameoutputpath') then
                 nameoutputpath = valChar
 			else if (var == 'nameofcase') then
@@ -530,9 +421,7 @@ module IO
 			else if (var == 'maskgwr_const') then
 				maskgwr_const = val
 			else if (var == 'specstor_const') then
-				specstor_const = val
-			else if (var == 'mannings_const') then
-				mannings_const = val		
+				specstor_const = val	
             else if (scan(var,'#') .gt. 0) then
                 continue
             else if (var == 'end') then
