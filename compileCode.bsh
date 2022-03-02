@@ -6,9 +6,7 @@ gfortran -c initialization.f90
 gfortran -c groundwatertable.f90
 gfortran -c lat_flux.f90
 gfortran -c gw_recharge.f90
-gfortran -c surfacewaterlevel.f90
-gfortran -c runoff.f90
 gfortran -c calculations.f90
 
-gfortran analysis.f90 declaration.o IO.o initialization.o groundwatertable.o lat_flux.o gw_recharge.o runoff.o surfacewaterlevel.o calculations.o -o analysis
+gfortran analysis.f90 declaration.o IO.o initialization.o groundwatertable.o lat_flux.o gw_recharge.o calculations.o -o analysis
 

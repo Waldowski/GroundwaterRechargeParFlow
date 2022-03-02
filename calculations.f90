@@ -4,8 +4,6 @@ module calculations
 	use lat_flux
     use gw_recharge
     use groundwatertable
-    use runoff
-	use surfacewaterlevel
     
     contains
     

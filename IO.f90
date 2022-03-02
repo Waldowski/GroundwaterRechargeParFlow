@@ -382,9 +382,7 @@ module IO
 			else if (var == 'constmaskgwr') then
 				constmaskgwr = int(val) /= 0
 			else if (var == 'constspecstor') then
-				constspecstor = int(val) /= 0
-			else if (var == 'constmannings') then
-				constmannings = int(val) /= 0				
+				constspecstor = int(val) /= 0			
             else if (var == 'namesatur') then
                 namesatur = valChar
             else if (var == 'namepress') then
