@@ -1,10 +1,3 @@
-!     
-! File:   declaration.f90
-! Author: Brandhorst
-!
-! Created on 24. Juli 2018, 15:29
-!
-
 ! Declaration of all variables possibly needed for the Parflow analysis
 module declaration
     
@@ -67,9 +60,7 @@ module declaration
     real*8,allocatable :: recharge_net(:,:),recharge_gross(:,:)               ! net and gross groundwater recharge
 	real*8,allocatable :: recharge_crossing(:,:),recharge_wt(:,:)             ! flux crossing gwt and recharge due to water table fluctuations
 	real*8,allocatable :: recharge_net_sat(:,:),recharge_gross_sat(:,:)       ! saturated recharge parts
-	real*8,allocatable :: recharge_net_unsat(:,:), recharge_gross_unsat(:,:) ! unsaturated recharge parts
 	real*8,allocatable :: riv_recharge_net(:,:), riv_recharge_gross(:,:)                             ! saturated parts of river recharge
-	real*8,allocatable :: riv_recharge_net_unsat(:,:), riv_recharge_gross_unsat(:,:)                       ! unsaturated parts of river recharge
 	real*8,allocatable :: riv_exch_flux(:,:),surf_wat_exch(:,:)               ! surface water exchange fluxes
     real*8,allocatable :: mask_gwr(:,:)                                       ! mask for gwr to account for rivers
 	real*8,allocatable :: theta_init(:,:,:)                                   ! initial water content

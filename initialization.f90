@@ -16,17 +16,13 @@ module initialization
         
 		if (doGrossRecharge) then
 			allocate(riv_recharge_gross(nix,niy))
-			allocate(riv_recharge_gross_unsat(nix,niy))
 			allocate(recharge_gross_sat(nix,niy))
-			allocate(recharge_gross_unsat(nix,niy))
 			allocate(riv_exch_flux(nix,niy))
 			allocate(recharge_gross(nix,niy))
          endif
         if (doNetRecharge) then
 			allocate(riv_recharge_net(nix,niy))
-			allocate(riv_recharge_net_unsat(nix,niy))
 			allocate(recharge_net_sat(nix,niy))
-			allocate(recharge_net_unsat(nix,niy))
 			allocate(gwcomp(nix,niy))
 			allocate(recharge_net(nix,niy))	
         endif

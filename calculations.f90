@@ -91,23 +91,15 @@ module calculations
 				recharge_gross_sat(j,k) = 0.0 ! reset value
 				recharge_gross(j,k) = recharge_wt(j,k) + recharge_crossing(j,k) + &  ! add flux which crosses the water table to groundwater storage changes and also account for lateral gw-discharge
 				(-f_r_out + f_l_out - f_f_out + f_b_out)/(meandx*meandy)
-				recharge_gross_unsat(j,k) = recharge_gross(j,k)
 				if (i_sat_new == niz) then ! one consistent waterbody
-					recharge_gross_unsat(j,k) = 0.0
 					recharge_gross_sat(j,k) = surf_wat_exch(j,k) + &
 					(-f_r_out + f_l_out - f_f_out + f_b_out)/(meandx*meandy)
 				endif
 				! mask out rivers for gross recharge
 				if (mask_gwr(j,k) == 0) then ! river
-					if (i_sat_new < niz) then
-						riv_recharge_gross_unsat(j,k) = recharge_gross(j,k)
-					else
-						riv_recharge_gross_unsat(j,k) = 0.0
-					endif
 					riv_recharge_gross(j,k) = recharge_gross(j,k)
 					riv_exch_flux(j,k) = surf_wat_exch(j,k)	
 					recharge_gross_sat(j,k) = 0.0
-					recharge_gross_unsat(j,k) = 0.0
 					recharge_crossing(j,k) = 0.0
 					recharge_gross(j,k) = 0.0
 				endif
@@ -122,24 +114,14 @@ module calculations
 				call Groundwaterspecificstorage
 				recharge_net(j,k) = recharge_wt(j,k) + (f_r_sum- f_r_out - f_l_sum + f_l_out + f_f_sum - f_f_out - f_b_sum + f_b_out) / & ! add lateral gw outflow + Ss term to recharge estimate based on watertable fluctuations - also account for lateral gw-discharge
 				(meandx*meandy) + gwcomp(j,k)	
-				recharge_net_unsat(j,k) = recharge_net(j,k)
 				recharge_net_sat(j,k) = 0.0 ! reset value
 				if (pressure(j,k,niz) >=0) then
 					recharge_net_sat(j,k) = recharge_net(j,k) - recharge_wt(j,k) ! recharge_wt is not a part of local ponding
-					if (i_sat_new == niz) then !one consistent waterbody
-						recharge_net_unsat(j,k) = 0.0
-					endif
 				endif
 				! mask out rivers
 				if (mask_gwr(j,k) == 0) then ! river
-					if (i_sat_new < niz) then
-						riv_recharge_net_unsat(j,k) = recharge_net(j,k)
-					else
-						riv_recharge_net_unsat(j,k) = 0.0
-					endif
 					riv_recharge_net(j,k) = recharge_net(j,k)
 					recharge_net_sat(j,k) = 0.0
-					recharge_net_unsat(j,k) = 0.0
 					recharge_net(j,k) = 0.0
 				endif
 			endif					
