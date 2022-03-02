@@ -289,8 +289,6 @@ module IO
 		if (doRechargeSources .and. doGrossRecharge .and. irec > 1) then
 			call write_binary(recharge_gross_sat,trim(nameoutputpath_curr)//'recharge_loc_pond_gross_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
-			call write_binary(riv_exch_flux,trim(nameoutputpath_curr)//'river_exch_flux_'//&
-			nameofcase_curr,nix,niy,1,irec-1)
 			call write_binary(surf_wat_exch,trim(nameoutputpath_curr)//'surf_wat_exch_flux_'//&
 			nameofcase_curr,nix,niy,1,irec-1)
 			call write_binary(riv_recharge_gross,trim(nameoutputpath_curr)//'recharge_river_gross_'//&

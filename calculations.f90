@@ -96,11 +96,16 @@ module calculations
 				! mask out rivers for gross recharge
 				if (mask_gwr(j,k) == 0) then ! river
 					riv_recharge_gross(j,k) = recharge_gross(j,k)
-					riv_exch_flux(j,k) = surf_wat_exch(j,k)	
 					recharge_gross_sat(j,k) = 0.0
 					recharge_crossing(j,k) = 0.0
 					recharge_gross(j,k) = 0.0
+				else
+					riv_recharge_gross(j,k) = 0.0
 				endif
+				! print*,'j',j
+				! print*,'k',k
+				! print*,'mask_gwr',mask_gwr(j,k)
+				! print*,'riv rech gross', riv_recharge_gross(j,k)
 			endif
 			! mask out rivers for flux crossing
 			if (doFluxCrossing) then
@@ -121,8 +126,10 @@ module calculations
 					riv_recharge_net(j,k) = recharge_net(j,k)
 					recharge_net_sat(j,k) = 0.0
 					recharge_net(j,k) = 0.0
+				else
+					riv_recharge_net(j,k) = 0.0
 				endif
-			endif					
+			endif	
 		endif
 
 		! reset summed up lateral fluxes

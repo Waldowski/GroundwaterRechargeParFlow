@@ -17,7 +17,6 @@ module initialization
 		if (doGrossRecharge) then
 			allocate(riv_recharge_gross(nix,niy))
 			allocate(recharge_gross_sat(nix,niy))
-			allocate(riv_exch_flux(nix,niy))
 			allocate(recharge_gross(nix,niy))
          endif
         if (doNetRecharge) then
