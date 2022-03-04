@@ -1,9 +1,9 @@
-#timing
+#timing 0
 istep 0 	#starting time step
 nstep 8760  #number of time steps	
 dt	  1     #time step size [hours]
 
-#grid (top to bottom)
+#grid 0
 nvardz 	50 	#number of vardz values
 vardz	0.02
 vardz 	0.03 	
@@ -56,14 +56,14 @@ vardz 	2.0
 vardz 	2.0
 vardz 	2.0
 
-#roots - for virtual lysimeter
-rootend     41 #last cell coupled to CLM
+#roots 0
+rootend     41 #last cell coupled to CLM (needed for virtual lysimeter)
 
-#define first and last ensemble member.
+#ensemble 0
 ensstart 1
 ensend 1
 
-#flags
+#flags 0
 doGrossRecharge		1 #calculate gross groundwater recharge
 doNetRecharge	        1 #calculate net groundwater recharge
 doFluxCrossing          1 #calculate the vertical flux crossing the water table
@@ -71,7 +71,6 @@ doRechargeSources       1 #split groundwater recharge into its different sources
 doVirtualLysimeter      1 #calculate the vertical flux below roots
 doGWTable               1 #calculate the depth to groundwater table
 
-#flags for constant parameters
 constsx 		0 #constant slope x?
 constsy 		0 #constant slope y?
 constporo 		0 #constant porosity?
@@ -81,7 +80,7 @@ constn 			0 #constant van gen. n?
 constmaskgwr 		0 #no gwr mask?
 constspecstor 		0 #constant spec. stor.?
 
-#write full path to out- and inputs. Write 'TIME' to refer to timestep in ParFlow index format (e.g. '00001'). Write 'ENSE' for ensemble member in ParFlow index format (e.g. '00001') and 'NUM' for straight number of ensemble member (e.g. '1').
+#filenames 0
 namesatur               /full/path/to/rurlaf.out.satur.TIME.pfb   #name of saturation file - needed for doGrossRecharge and doNetRecharge. 
 namepress               /full/path/to/rurlaf.out.press.TIME.pfb   #name of pressure file - needed for everything
 nameslopex              /full/path/to/input.pfb                   #name of x-slope file - needed for doGrossRecharge, doNetRecharge and doRunoff
@@ -96,7 +95,6 @@ namespecstor            /full/path/to/input.pfb                   #name of speci
 nameoutputpath          /full/path/                               #path for postprocessed output files
 nameofcase              Test                                      #specific name contained in all generated outputs
 
-#if flag for constant parameters is set to 1, these values are read in
 sx_const                0.0
 sy_const                0.0
 poro_const              0.0
