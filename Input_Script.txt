@@ -81,7 +81,7 @@ constn 			0 #constant van gen. n?
 constmaskgwr 		0 #no gwr mask?
 constspecstor 		0 #constant spec. stor.?
 
-#write full path to out- and inputs. Write 'TIME' to refer to timestep in ParFlow index format (e.g. '00001'). Write 'ENS' for ensemble member in ParFlow index format (e.g. '00001') and 'NUM' for straight number of ensemble member (e.g. '1').
+#write full path to out- and inputs. Write 'TIME' to refer to timestep in ParFlow index format (e.g. '00001'). Write 'ENSE' for ensemble member in ParFlow index format (e.g. '00001') and 'NUM' for straight number of ensemble member (e.g. '1').
 namesatur               /full/path/to/rurlaf.out.satur.TIME.pfb   #name of saturation file - needed for doGrossRecharge and doNetRecharge. 
 namepress               /full/path/to/rurlaf.out.press.TIME.pfb   #name of pressure file - needed for everything
 nameslopex              /full/path/to/input.pfb                   #name of x-slope file - needed for doGrossRecharge, doNetRecharge and doRunoff
@@ -103,7 +103,7 @@ poro_const              0.0
 ksat_const              0.0
 alpha_const             0.0
 n_const                 0.0
-maskgwr_const           0.0
+maskgwr_const           1
 specstor_const          0.0
 
 end   0
